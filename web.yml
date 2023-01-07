@@ -1,0 +1,37 @@
+- hosts: all
+  tasks:
+
+
+  # 1. Yum install apache
+  - name: install the latest version of Apache
+    yum:
+      name: httpd
+      state: latest
+
+
+  - name: Start service httpd, of not started 
+    service:
+      name: httpd
+      state: started
+      enabled: yes
+
+  - name: install the latest version of Apache
+    yum:
+      name: "{{ packages }}"
+    vars:
+      packages:
+      - wget
+      - unzip    
+
+  
+  - name: Download and extract Template
+    unarchive: 
+      src: https://www.free-css.com/assets/files/free-css-templates/download/page280/spa-center.zip
+      dest: /tmp/
+      remote_src: yes
+
+  - name: Copy a "sudoers" file on the remote machine for editing
+    copy: 
+      src: /tmp/spa-html-template/
+      dest: /var/www/html/
+      remote_src: yes
